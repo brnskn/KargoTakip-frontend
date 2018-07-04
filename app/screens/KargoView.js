@@ -5,7 +5,8 @@ import {
   View,
   Alert,
   FlatList,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  ScrollView
 } from 'react-native';
 import { Card, ListItem } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -22,7 +23,7 @@ var db = new SQLiteHelper()
 
 export default class KargoView extends Component<{}> {
   static navigationOptions  = ({ navigation }) => ({
-    title: `Hareketler: ${navigation.state.params.item.tn}`,
+    title: `${navigation.state.params.item.tn}`,
     headerRight: (
       <Icon.Button
         name='md-refresh'
@@ -47,29 +48,31 @@ export default class KargoView extends Component<{}> {
       <View style={{flex: 1, backgroundColor: '#F5FCFF'}}>
         <Spinner visible={this.state.loading} textContent={"Lütfen bekleyin"} textStyle={{color: '#FFFFFF'}} />
         <View style={styles.container}>
-          <Card containerStyle={{padding: 0, margin:0, marginTop:10}}>
-            <ListItem
-              hideChevron
-              key={params.item.id}
-              title={kargoFirmalari[params.item.firma]}
-              subtitle={params.item.tn}
-            />
-          </Card>
-          <Card title='Hareketler' containerStyle={{margin:0, marginTop:10}}>
-            <FlatList
-              data={JSON.parse(params.item.opts)}
-              renderItem={({item}) =>
-                (
-                  <ListItem
-                    hideChevron
-                    key={item.id}
-                    title={item.islem}
-                    subtitle={<Text style={{paddingTop: 5, paddingLeft:10 }}>{item.tarih + "-" + item.yer}</Text>}
-                  />
-                )
-              }
-            />
-          </Card>
+          <ScrollView>
+            <Card containerStyle={{padding: 0, margin:0, marginTop:10}}>
+              <ListItem
+                hideChevron
+                key={params.item.id}
+                title={kargoFirmalari[params.item.firma]}
+                subtitle={params.item.tn}
+              />
+            </Card>
+            <Card title='Hareketler' containerStyle={{margin:0, marginTop:10}}>
+              <FlatList
+                data={JSON.parse(params.item.opts)}
+                renderItem={({item}) =>
+                  (
+                    <ListItem
+                      hideChevron
+                      key={item.id}
+                      title={item.islem}
+                      subtitle={<Text style={{paddingTop: 5, paddingLeft:10 }}>{item.tarih + "\n" + item.yer}</Text>}
+                    />
+                  )
+                }
+              />
+            </Card>
+          </ScrollView>
         </View>
         <View style={styles.ads}>
           <AdMobBanner

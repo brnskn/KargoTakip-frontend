@@ -5,7 +5,8 @@ import {
   View,
   Alert,
   FlatList,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  ScrollView
 } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 import { TextField } from 'react-native-material-textfield';
@@ -54,37 +55,39 @@ export default class KargoEkle extends Component<{}> {
       <View style={{flex: 1, backgroundColor: '#F5FCFF'}}>
         <View style={styles.container}>
           <Spinner visible={this.state.loading} textContent={"Lütfen bekleyin"} textStyle={{color: '#FFFFFF'}} />
-          <Dropdown
-            label='Kargo Firması'
-            data={data}
-            onChangeText={(value, index, data) => this.setState({
-              firma: firma_tag[index].value
-            })}
-          />
-          <TextField
-            label='Takip Numarası'
-            value={this.state.tn}
-            onChangeText={ (tn) => this.setState({ tn: tn }) }
-          />
-          <Button
-            containerViewStyle={{marginLeft: 0, marginRight: 0}}
-            onPress={this.sorgula}
-            title='SORGULA' />
-          <Card containerStyle={[{padding: 0, margin:0, marginTop:10}, this.state.hideHareket && styles.hide]} >
-            <FlatList
-              data={this.state.opts}
-              renderItem={({item}) =>
-                (
-                  <ListItem
-                    hideChevron
-                    key={item.id}
-                    title={item.islem}
-                    subtitle={<Text style={{paddingTop: 5, paddingLeft:10 }}>{item.tarih + "-" + item.yer}</Text>}
-                  />
-                )
-              }
+          <ScrollView>
+            <Dropdown
+              label='Kargo Firması'
+              data={data}
+              onChangeText={(value, index, data) => this.setState({
+                firma: firma_tag[index].value
+              })}
             />
-          </Card>
+            <TextField
+              label='Takip Numarası'
+              value={this.state.tn}
+              onChangeText={ (tn) => this.setState({ tn: tn }) }
+            />
+            <Button
+              containerViewStyle={{marginLeft: 0, marginRight: 0}}
+              onPress={this.sorgula}
+              title='SORGULA' />
+            <Card containerStyle={[{padding: 0, margin:0, marginTop:10}, this.state.hideHareket && styles.hide]} >
+              <FlatList
+                data={this.state.opts}
+                renderItem={({item}) =>
+                  (
+                    <ListItem
+                      hideChevron
+                      key={item.id}
+                      title={item.islem}
+                      subtitle={<Text style={{paddingTop: 5, paddingLeft:10 }}>{item.tarih + "\n" + item.yer}</Text>}
+                    />
+                  )
+                }
+              />
+            </Card>
+          </ScrollView>
         </View>
         <View style={styles.ads}>
           <AdMobBanner
